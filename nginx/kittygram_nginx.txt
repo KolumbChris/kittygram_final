@@ -20,4 +20,3 @@ EX_IP = 51.250.96.12
 LOC_IP = 127.0.0.1
 EX_HOST = 'kittyprettyya.ru'
 LOC_HOST = 'localhost'
-os.getenv('')
