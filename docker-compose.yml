@@ -3,7 +3,6 @@ version: '3'
 volumes:
   pg_data:
   static:
-  media:
 
 services:
   db:
@@ -12,24 +11,26 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
   backend:
-    build: ./backend/
+    image: chriskolumb/kittygram_backend
     env_file: .env
     depends_on:
       - db
     volumes:
       - static:/backend_static
-      - media:/media/
+      # Используйте bind mount для указания абсолютного пути на хосте
+      - /var/www/kittygram/media/cats/images/:/var/www/kittygram/media
   frontend:
     env_file: .env
-    build: ./frontend/
+    image: chriskolumb/kittygram_frontend
     command: cp -r /app/build/. /static/
     volumes:
       - static:/static
   gateway:
-    build: ./nginx/
+    image: chriskolumb/kittygram_gateway
     env_file: .env
     ports:
       - 9000:80
     volumes:
       - static:/static
-      - media:/media/
+      # Повторите bind mount, если gateway также использует медиа файлы
+      - /var/www/kittygram/media/cats/images/:/var/www/kittygram/media
